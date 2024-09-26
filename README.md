@@ -1,6 +1,8 @@
 # Schematic Design PCB
 The Schematic Design illustrates the electrical connections and components used in the Arduino Gesture Control Car Transmitter. This design includes the gesture sensor, microcontroller (e.g., Arduino or ESP32), and any additional components such as motors, power supply, and communication modules.
-([https://i.imgur.com/HU0WPhU.jpeg](https://imgur.com/a/EYQunqk))
+
+
+(https://i.imgur.com/HU0WPhU.jpeg)
 
 # Wiring Diagram 
 The Wiring Diagram shows how to physically connect the components of the system. It includes wiring details for the transmitter, motors, sensors, and any other connected devices.
