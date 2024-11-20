@@ -6,17 +6,162 @@ The Schematic Design illustrates the electrical connections and components used 
 
 # Wiring Diagram 
 The Wiring Diagram shows how to physically connect the components of the system. It includes wiring details for the transmitter, motors, sensors, and any other connected devices.
+This diagram provides the physical connections between the components, ensuring proper wiring of:
+- Gesture sensor to the microcontroller.
+- Motor driver to DC motors.
+- Power supply for the microcontroller and motors.
+
+Example Pin Configuration:
+
+```
+MPU6050 Connections:
+VCC -> 3.3V
+GND -> GND
+SCL -> A5 (Arduino)
+SDA -> A4 (Arduino)
+
+Motor Driver (L298N) Connections:
+IN1, IN2 -> Digital Pins 2, 3
+IN3, IN4 -> Digital Pins 4, 5
+```
+
+
+
 ![Screenshot 2024-09-26 203713](https://github.com/user-attachments/assets/8ab5fb18-68a8-4e24-a83e-456ae4ab7094)
 ![Screenshot 2024-09-26 203739](https://github.com/user-attachments/assets/541d3c01-8be4-49ce-91c5-7900381a6eb5)
 
 
 # Block Diagram
-The Block Diagram provides an abstract view of the system architecture, showing the major modules and their interactions. It includes components such as the microcontroller, gesture sensor, communication module, motor driver, and power supply.
+The block diagram illustrates the system architecture, including the following components:
+
+1. Microcontroller: Arduino/ESP32 processes the sensor data.
+2. Gesture Sensor: Captures hand movements.
+3. Motor Driver: Controls the DC motors based on processed data.
+4. DC Motors: Enable movement of the car.
+5. Power Supply: Powers the entire system.
+
 ![Screenshot 2024-09-26 203807](https://github.com/user-attachments/assets/007df720-2d19-4ac6-b208-f73ac81b11a7)
 
 
 # Flowchart System
-The Flowchart System represents the logical flow of the program controlling the car. It explains how the system processes inputs (gestures) and outputs commands to control the car’s movement.
+The flowchart represents the logic of the system, detailing how the program:
+1. Reads inputs from the gesture sensor.
+2. Interprets gestures into directional commands.
+3. Sends signals to the motor driver to move the car.
+
+```
+Start
+  |
+  V
+Read Gesture Sensor Data
+  |
+  V
+Determine Command:
+  - Forward
+  - Backward
+  - Left
+  - Right
+  - Stop
+  |
+  V
+Send Command to Motor Driver
+  |
+  V
+End
+```
+
+
+# Key Code Snippets
+## Gesture Sensor Integration
+
+```
+#include <Wire.h>
+#include <Adafruit_MPU6050.h>
+#include <Adafruit_Sensor.h>
+
+Adafruit_MPU6050 mpu;
+
+void setup() {
+    Serial.begin(115200);
+    if (!mpu.begin()) {
+        Serial.println("Failed to find MPU6050 sensor!");
+        while (1);
+    }
+    Serial.println("MPU6050 Found!");
+}
+
+void loop() {
+    sensors_event_t a, g, temp;
+    mpu.getEvent(&a, &g, &temp);
+
+    Serial.print("Accel X: "); Serial.print(a.acceleration.x); 
+    Serial.print(", Y: "); Serial.print(a.acceleration.y);
+    Serial.print(", Z: "); Serial.println(a.acceleration.z);
+
+    delay(500);
+}
+```
+
+# Motor Control
+
+```
+#define IN1 2
+#define IN2 3
+#define IN3 4
+#define IN4 5
+
+void setupMotors() {
+    pinMode(IN1, OUTPUT);
+    pinMode(IN2, OUTPUT);
+    pinMode(IN3, OUTPUT);
+    pinMode(IN4, OUTPUT);
+}
+
+void moveForward() {
+    digitalWrite(IN1, HIGH);
+    digitalWrite(IN2, LOW);
+    digitalWrite(IN3, HIGH);
+    digitalWrite(IN4, LOW);
+}
+
+void stopMotors() {
+    digitalWrite(IN1, LOW);
+    digitalWrite(IN2, LOW);
+    digitalWrite(IN3, LOW);
+    digitalWrite(IN4, LOW);
+}
+
+void loop() {
+    moveForward();
+    delay(2000);  // Move forward for 2 seconds
+    stopMotors();
+    delay(1000);  // Stop for 1 second
+}
+```
+
+## Installation and Setup
+## Step 1: Clone the Repository
+
+```
+git clone https://github.com/ahmaadfaauzn2/GestureGo.git
+cd GestureGo
+```
+
+# Step 2: Configure the Hardware
+1. Wire the components as per the Wiring Diagram.
+2. Upload the Arduino code to the microcontroller.
+
+# Step 3: Flash the Code
+1. Open the src/main.cpp in the Arduino IDE or PlatformIO.
+2. Select the appropriate board and port.
+3. Upload the code.
+
+# Step 4: Test the System
+1. Place the gesture sensor on your hand.
+2. Observe the car's movement based on gestures.
+
+
+   
 ![Screenshot 2024-09-26 203836](https://github.com/user-attachments/assets/70498481-5fc8-42bb-83d9-ac69fbecd811)
 
 # 3D Design Model Car
